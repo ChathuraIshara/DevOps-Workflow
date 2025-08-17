@@ -2,16 +2,25 @@ FROM node:20-alpine
 
 WORKDIR /frontend
 
-COPY package.json .
+# Copy dependency files first (better caching)
+COPY package.json package-lock.json* ./
 
-RUN npm install
+# Install fresh dependencies
+RUN npm ci
 
-RUN npm i -g serve
+# Install serve globally
+RUN npm install -g serve
 
+# Copy rest of the code
 COPY . .
 
+# Rebuild esbuild for Alpine (important!)
+RUN npm rebuild esbuild
+
+# Build React app
 RUN npm run build
 
 EXPOSE 3000
 
-CMD [ "serve", "-s", "dist" ]
+# Serve the build
+CMD ["serve", "-s", "dist", "-l", "3000"]
