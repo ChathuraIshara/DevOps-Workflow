@@ -15,6 +15,6 @@ app.use("/notes", notesRouter);
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log('start servers');
+  console.log('start servers hello');
   console.log(`Servers running on http://localhost:${PORT}`);
 });
